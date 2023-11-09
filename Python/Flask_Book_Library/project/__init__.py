@@ -7,12 +7,20 @@ from flask_migrate import Migrate
 # Database Setup
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'supersecret' # To allow us to use forms
+app.config["SECRET_KEY"] = "supersecret"  # To allow us to use forms
+# ^ Does not actually allow us to use forms, CSRF tokens aren't sent by the client
+# Disable CSRF validation for forms, to show field validation working
+app.config["WTF_CSRF_ENABLED"] = False
+
+
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+os.path.join(basedir, 'data.sqlite')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    basedir, "data.sqlite"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 Migrate(app, db)
