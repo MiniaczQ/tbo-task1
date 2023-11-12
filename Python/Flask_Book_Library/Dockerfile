@@ -4,11 +4,17 @@ FROM python:3.9-slim
 # Ustawiamy katalog roboczy w kontenerze
 WORKDIR /app
 
+# Zbieramy zależności
+COPY ./requirements.txt /app/requirements.txt
+
+# Instalujemy zależności - warstwa cache
+RUN pip install -r requirements.txt
+
 # Kopiujemy pliki projektu do kontenera
 COPY . .
 
-# Instalujemy zależności
-RUN pip install --no-cache-dir -r requirements.txt
+# Uruchamiamy testy
+RUN pytest
 
 # Ustawiamy zmienną środowiskową, aby Flask wiedział, jak uruchomić aplikację
 ENV FLASK_APP=app.py
